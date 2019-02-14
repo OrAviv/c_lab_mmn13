@@ -1,14 +1,45 @@
 //
 // Created by Or Aviv on 2019-02-11.
 //
-#include "mat.h"
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "mat.h"
+
 #define MAT_ROW_SIZE 4
 #define MAT_COLUMN_SIZE 4
 #define MAX_PTINT_SIZE 1000000
 
+char *function_name_parser(char *function_name)
+{
+    if (strcmp(function_name, "add_mat"))
+    {
 
+    }
+    else if (strcmp(function_name, "sub_mat"))
+    {
+
+    }
+    else if (strcmp(function_name, "mul_mat"))
+    {
+
+    }
+    else if (strcmp(function_name, "mul_scalar"))
+    {
+
+    }
+    else if (strcmp(function_name, "trans_mat"))
+    {
+
+    }
+    else
+        return "Undefined command name";
+
+}
+
+/*sets mat_result to mat_a*/
 void set_mat (mat *mat_a, mat *mat_result)
 {
     for (int i = 0; i < MAT_ROW_SIZE; i++)

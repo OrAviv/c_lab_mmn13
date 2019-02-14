@@ -17,5 +17,7 @@ void mul_scalar (mat *mat_a, double multiplyer, mat *mat_result);
 void trans_mat (mat *mat_a, mat *mat_result);
 void stop ();
 
+char *function_name_parser(char *);
+
 
 #endif //MAMAN13_MAT_H
