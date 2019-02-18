@@ -10,34 +10,44 @@
 
 #define MAT_ROW_SIZE 4
 #define MAT_COLUMN_SIZE 4
-#define MAX_PTINT_SIZE 1000000
+#define MAX_PRINT_SIZE 1000000
 
-char *function_name_parser(char *function_name)
+mat MAT_A = {0};
+mat MAT_B = {0};
+mat MAT_C = {0};
+mat MAT_D = {0};
+mat MAT_E = {0};
+mat MAT_F = {0};
+
+
+mat *get_matrix(char* mat_name)
 {
-    if (strcmp(function_name, "add_mat"))
-    {
-
-    }
-    else if (strcmp(function_name, "sub_mat"))
-    {
-
-    }
-    else if (strcmp(function_name, "mul_mat"))
-    {
-
-    }
-    else if (strcmp(function_name, "mul_scalar"))
-    {
-
-    }
-    else if (strcmp(function_name, "trans_mat"))
-    {
-
-    }
+    if(strcmp(mat_name, "MAT_A"))
+        return &MAT_A;
+    if(strcmp(mat_name, "MAT_B"))
+        return &MAT_B;
+    if(strcmp(mat_name, "MAT_C"))
+        return &MAT_C;
+    if(strcmp(mat_name, "MAT_D"))
+        return &MAT_D;
+    if(strcmp(mat_name, "MAT_E"))
+        return &MAT_E;
+    if(strcmp(mat_name, "MAT_F"))
+        return &MAT_F;
     else
-        return "Undefined command name";
-
+        return NULL;
 }
+
+void get_word(char *word)
+{
+    int c;
+    int i = 0;
+    while ((c = getchar()) != ' ' && c != ',' && c != EOF)
+    {
+        word[i] = (char)c;
+    }
+}
+
 
 /*sets mat_result to mat_a*/
 void set_mat (mat *mat_a, mat *mat_result)
@@ -71,7 +81,7 @@ void print_mat (mat *mat_a)
     {
         for (int j = 0; j < MAT_COLUMN_SIZE; j++)
         {
-            if (*mat_a[i][j] >= MAX_PTINT_SIZE)
+            if (*mat_a[i][j] >= MAX_PRINT_SIZE)
                 printf("%.2f ",*mat_a[i][j]);
             else
                 printf("%-7.2f ",*mat_a[i][j]);
