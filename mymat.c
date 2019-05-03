@@ -71,6 +71,9 @@ int main()
     char* first_mat_name = malloc(MAX_MAT_MAME);
     char* second_mat_name = malloc(MAX_MAT_MAME);
     char* result_mat_name = malloc(MAX_MAT_MAME);
+    mat *first_mat;
+    mat *second_mat;
+    mat *result_mat;
 
     while (*command != EOF)
     {
@@ -79,32 +82,102 @@ int main()
         if (strcmp(command, "add_mat"))
         {
             get_word(first_mat_name);
+            first_mat = get_matrix(first_mat_name);
             get_word(second_mat_name);
+            second_mat = get_matrix(second_mat_name);
             get_word(result_mat_name);
+            result_mat = get_matrix(result_mat_name);
+            if (first_mat == NULL || second_mat == NULL || result_mat == NULL)
+            {
+                printf("Undefined matrix name");
+                continue;
+            }
+            add_mat(first_mat, second_mat, result_mat);
+
         }
         else if (strcmp(command, "sub_mat"))
         {
             get_word(first_mat_name);
+            first_mat = get_matrix(first_mat_name);
             get_word(second_mat_name);
+            second_mat = get_matrix(second_mat_name);
             get_word(result_mat_name);
+            result_mat = get_matrix(result_mat_name);
+            if (first_mat == NULL || second_mat == NULL || result_mat == NULL)
+            {
+                printf("Undefined matrix name");
+                continue;
+            }
+            sub_mat(first_mat, second_mat, result_mat);
         }
         else if (strcmp(command, "mul_mat"))
         {
             get_word(first_mat_name);
+            first_mat = get_matrix(first_mat_name);
             get_word(second_mat_name);
+            second_mat = get_matrix(second_mat_name);
             get_word(result_mat_name);
+            result_mat = get_matrix(result_mat_name);
+            if (first_mat == NULL || second_mat == NULL || result_mat == NULL)
+            {
+                printf("Undefined matrix name");
+                continue;
+            }
+            mul_mat(first_mat,second_mat, first_mat);
         }
         else if (strcmp(command, "mul_scalar"))
         {
             get_word(first_mat_name);
+            first_mat = get_matrix(first_mat_name);
             get_word(result_mat_name);
+            result_mat = get_matrix(result_mat_name);
+            if (first_mat == NULL || result_mat == NULL)
+            {
+                printf("Undefined matrix name");
+                continue;
+            }
+
+//            mul_scalar(first_mat, )
 
         }
         else if (strcmp(command, "trans_mat"))
         {
             get_word(first_mat_name);
+            first_mat = get_matrix(first_mat_name);
             get_word(result_mat_name);
+            result_mat = get_matrix(result_mat_name);
+            if (first_mat == NULL || result_mat == NULL)
+            {
+                printf("Undefined matrix name");
+                continue;
+            }
+            trans_mat(first_mat, result_mat);
         }
+        else if (strcmp(command, "read_mat"))
+        {
+            get_word(first_mat_name);
+            first_mat = get_matrix(first_mat_name);
+            if (first_mat == NULL)
+            {
+                printf("Undefined matrix name");
+                continue;
+            }
+
+            read_mat(first_mat);
+        }
+        else if (strcmp(command, "print_mat"))
+        {
+            get_word(first_mat_name);
+            first_mat = get_matrix(first_mat_name);
+            if (first_mat == NULL)
+            {
+                printf("Undefined matrix name");
+                continue;
+            }
+
+            print_mat(first_mat);
+        }
+
         else
             printf("Undefined command name");
 

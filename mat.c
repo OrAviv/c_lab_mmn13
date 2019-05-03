@@ -11,6 +11,7 @@
 #define MAT_ROW_SIZE 4
 #define MAT_COLUMN_SIZE 4
 #define MAX_PRINT_SIZE 1000000
+#define NUMBER_SIZE 10000000
 
 mat MAT_A = {0};
 mat MAT_B = {0};
@@ -40,11 +41,12 @@ mat *get_matrix(char* mat_name)
 
 void get_word(char *word)
 {
-    int c;
+    int c = 0;
     int i = 0;
     while ((c = getchar()) != ' ' && c != ',' && c != EOF)
     {
         word[i] = (char)c;
+        i++;
     }
 }
 
@@ -61,19 +63,38 @@ void set_mat (mat *mat_a, mat *mat_result)
     }
 }
 
-void read_mat (mat *mat_a, ...)
+//void read_mat (mat *mat_a, ...)
+//{
+//    va_list ap; /*points to each unnamed argument in turn*/
+//    va_start(ap, mat_a);
+//    for (int i = 0; i < MAT_ROW_SIZE; i++)
+//    {
+//        for (int j = 0; j < MAT_COLUMN_SIZE; j++)
+//        {
+//            if ((int *)ap < 'a' && (int *)ap > 'z')
+//            {
+//                printf("Parameter not a real number");
+//                break;
+//            }
+//            *mat_a[i][j] = va_arg(ap, double);
+//        }
+//    }
+//    va_end(ap);
+//}
+
+void read_mat (mat *mat_a,...)
 {
-    va_list ap; /*points to each unnamed argument in turn*/
-    va_start(ap, mat_a);
     for (int i = 0; i < MAT_ROW_SIZE; i++)
     {
         for (int j = 0; j < MAT_COLUMN_SIZE; j++)
         {
-            *mat_a[i][j] = va_arg(ap, double);
+            scanf("%lf", mat_a[i][j]);
         }
     }
-    va_end(ap);
+
+
 }
+
 
 void print_mat (mat *mat_a)
 {
