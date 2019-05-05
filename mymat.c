@@ -26,22 +26,19 @@ int main()
     int* position_in_string;
 
 
-    fgets(input_string, MAX_STRING_SIZE , stdin);
-
-    while (strcmp(input_string, "stop") != 0)
+    do
     {
+        clean_string(command_name, MAX_COMMAND_SIZE);
+        fgets(input_string, MAX_STRING_SIZE , stdin);
         *position_in_string = 0;
 
         get_command_name(input_string, command_name, position_in_string);
 
         if (strcmp(command_name, "add_mat") == 0)
         {
-            get_mat_name(input_string, first_mat_name,position_in_string);
-            first_mat = get_matrix(first_mat_name);
-            get_mat_name(input_string, second_mat_name, position_in_string);
-            second_mat = get_matrix(second_mat_name);
-            get_mat_name(input_string, result_mat_name, position_in_string);
-            result_mat = get_matrix(result_mat_name);
+            first_mat = get_mat_name(input_string, first_mat_name,position_in_string);
+            second_mat = get_mat_name(input_string, second_mat_name, position_in_string);
+            result_mat = get_mat_name(input_string, result_mat_name, position_in_string);
             if (first_mat == NULL || second_mat == NULL || result_mat == NULL)
             {
                 printf("Undefined matrix name\n");
@@ -52,12 +49,9 @@ int main()
         }
         else if (strcmp(command_name, "sub_mat") == 0)
         {
-            get_mat_name(input_string, first_mat_name,position_in_string);
-            first_mat = get_matrix(first_mat_name);
-            get_mat_name(input_string, second_mat_name, position_in_string);
-            second_mat = get_matrix(second_mat_name);
-            get_mat_name(input_string, result_mat_name, position_in_string);
-            result_mat = get_matrix(result_mat_name);
+            first_mat = get_mat_name(input_string, first_mat_name,position_in_string);
+            second_mat = get_mat_name(input_string, second_mat_name, position_in_string);
+            result_mat = get_mat_name(input_string, result_mat_name, position_in_string);
             if (first_mat == NULL || second_mat == NULL || result_mat == NULL)
             {
                 printf("Undefined matrix name\n");
@@ -67,12 +61,9 @@ int main()
         }
         else if (strcmp(command_name, "mul_mat") == 0)
         {
-            get_mat_name(input_string, first_mat_name,position_in_string);
-            first_mat = get_matrix(first_mat_name);
-            get_mat_name(input_string, second_mat_name, position_in_string);
-            second_mat = get_matrix(second_mat_name);
-            get_mat_name(input_string, result_mat_name, position_in_string);
-            result_mat = get_matrix(result_mat_name);
+            first_mat = get_mat_name(input_string, first_mat_name,position_in_string);
+            second_mat = get_mat_name(input_string, second_mat_name, position_in_string);
+            result_mat = get_mat_name(input_string, result_mat_name, position_in_string);
             if (first_mat == NULL || second_mat == NULL || result_mat == NULL)
             {
                 printf("Undefined matrix name\n");
@@ -83,13 +74,11 @@ int main()
         else if (strcmp(command_name, "mul_scalar") == 0)
         {
             double multiplayer = 0;
-            get_mat_name(input_string, first_mat_name, position_in_string);
-            first_mat = get_matrix(first_mat_name);
+            first_mat = get_mat_name(input_string, first_mat_name, position_in_string);
             multiplayer = parse_double_from_string(input_string, position_in_string);
             if (!multiplayer)
                 continue;
-            get_mat_name(input_string, result_mat_name, position_in_string);
-            result_mat = get_matrix(result_mat_name);
+            result_mat = get_mat_name(input_string, result_mat_name, position_in_string);
             if (first_mat == NULL || result_mat == NULL)
             {
                 printf("Undefined matrix name\n");
@@ -100,10 +89,8 @@ int main()
         }
         else if (strcmp(command_name, "trans_mat") == 0)
         {
-            get_mat_name(input_string, first_mat_name, position_in_string);
-            first_mat = get_matrix(first_mat_name);
-            get_mat_name(input_string, result_mat_name, position_in_string);
-            result_mat = get_matrix(result_mat_name);
+            first_mat = get_mat_name(input_string, first_mat_name, position_in_string);
+            result_mat = get_mat_name(input_string, result_mat_name, position_in_string);
             if (first_mat == NULL || result_mat == NULL)
             {
                 printf("Undefined matrix name\n");
@@ -113,8 +100,7 @@ int main()
         }
         else if (strcmp(command_name, "read_mat") == 0)
         {
-            get_mat_name(input_string, first_mat_name, position_in_string);
-            first_mat = get_matrix(first_mat_name);
+            first_mat = get_mat_name(input_string, first_mat_name, position_in_string);
             if (first_mat == NULL)
             {
                 printf("Undefined matrix name\n");
@@ -125,8 +111,7 @@ int main()
         }
         else if (strcmp(command_name, "print_mat") == 0)
         {
-            get_mat_name(input_string, first_mat_name, position_in_string);
-            first_mat = get_matrix(first_mat_name);
+            first_mat = get_mat_name(input_string, first_mat_name, position_in_string);
             if (first_mat == NULL)
             {
                 printf("Undefined matrix name\n");
@@ -136,13 +121,15 @@ int main()
             print_mat(first_mat);
         }
 
+        else if (strcmp(command_name, "stop") == 0)
+            break;
+
         else
             printf("Undefined command name \n");
 
-        clean_string(command_name, MAX_COMMAND_SIZE);
-        fgets(input_string, MAX_STRING_SIZE , stdin);
-
     }
+    while (strcmp(input_string, "stop") != 0);
+
 
     free(input_string);
     free(command_name);

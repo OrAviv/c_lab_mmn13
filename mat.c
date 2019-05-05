@@ -32,6 +32,7 @@ void clean_string (char* string , int size_of_clean)
 
 void get_command_name(char* string, char* command_name, int* i)
 {
+    int index = 0;
     while (string[*i] != ' ')
     {
         if (string[*i] == ',')
@@ -40,12 +41,14 @@ void get_command_name(char* string, char* command_name, int* i)
             *command_name = (char)NULL;
             break;
         }
-        command_name[*i] = string[*i];
+        command_name[index] = string[*i];
+        index++;
         (*i)++;
     }
+    command_name[index] = '\0';
 }
 
-void get_mat_name(char* string, char* mat_name, int* i)
+mat *get_mat_name(char* string, char* mat_name, int* i)
 {
     int indicator = 0;
     while (string[*i] == ' ')
@@ -54,25 +57,26 @@ void get_mat_name(char* string, char* mat_name, int* i)
         if (string[*i] == ',')
         {
             printf("Missing parameter");
-            return;
+            return NULL;
         }
     }
 
     if (string[*i] == ',')
     {
         printf("illegal comma");
-        return;
+        return NULL;
     }
 
-    while (string[*i] != ',' && string[*i] != '\n')
+    while (string[*i] != ',' && string[*i] != '\0' && string[*i] != ' ' && string[*i] != '\n')
     {
         mat_name[indicator] = string[*i];
         indicator++;
         (*i)++;
     }
-
-    if (string[*i] != '\n')
+    while (string[*i] == ' ' || string[*i] == ',')
         (*i)++;
+
+    return get_matrix(mat_name);
 }
 
 double parse_double_from_string (char* string, int* i)
@@ -98,14 +102,14 @@ double parse_double_from_string (char* string, int* i)
         return 0;
     }
 
-    while (string[*i] != ',' && string[*i] != '\n')
+    while (string[*i] != ',' && string[*i] != '\0' && string[*i] != '\n')
     {
         str_number[indicator] = string[*i];
         indicator++;
         (*i)++;
     }
 
-    if (string[*i] != '\n')
+    if (string[*i] != '\0')
         (*i)++;
     double return_value = atof(str_number);
     free(str_number);
@@ -115,17 +119,18 @@ double parse_double_from_string (char* string, int* i)
 
 mat *get_matrix(char* mat_name)
 {
-    if(strcmp(mat_name, "MAT_A"))
+    int val = strcmp(mat_name,"MAT_A");
+    if(strcmp(mat_name, "MAT_A") == 0)
         return &MAT_A;
-    if(strcmp(mat_name, "MAT_B"))
+    if(strcmp(mat_name, "MAT_B") == 0)
         return &MAT_B;
-    if(strcmp(mat_name, "MAT_C"))
+    if(strcmp(mat_name, "MAT_C") == 0)
         return &MAT_C;
-    if(strcmp(mat_name, "MAT_D"))
+    if(strcmp(mat_name, "MAT_D") == 0)
         return &MAT_D;
-    if(strcmp(mat_name, "MAT_E"))
+    if(strcmp(mat_name, "MAT_E") == 0)
         return &MAT_E;
-    if(strcmp(mat_name, "MAT_F"))
+    if(strcmp(mat_name, "MAT_F") == 0)
         return &MAT_F;
     else
         return NULL;
@@ -150,7 +155,7 @@ void read_mat (mat *my_mat, char* string, int* index)
     {
         for (int j = 0; j < MAT_COLUMN_SIZE; j++)
         {
-            if (string[*index] == '\n')
+            if (string[*index] == '\0')
                 return;
             value = parse_double_from_string(string, index);
             if (!value)
