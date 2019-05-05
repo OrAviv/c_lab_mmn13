@@ -6,68 +6,16 @@
 #include "mat.h"
 
 
-#define MAX_COMMAND_SIZE 8000
-#define MAX_FUNCTION_NAME 11
+#define MAX_STRING_SIZE 800000000
+#define MAX_COMMAND_SIZE 11
 #define MAX_MAT_MAME 6
 
-//int main() {
-//
-//    mat MAT_A = {0};
-//    mat MAT_B = {0};
-//    mat MAT_C = {0};
-//    mat MAT_D = {0};
-//    mat MAT_E = {0};
-//    mat MAT_F = {0};
-//
-//    char* command = malloc(MAX_COMMAND_SIZE);
-//    char* function_name  = malloc(MAX_FUNCTION_NAME);
-//    char* first_mat_name = malloc(MAX_MAT_MAME);
-//    char* second_mat_name = malloc(MAX_MAT_MAME);
-//    char* result_mat_name = malloc(MAX_MAT_MAME);
-//
-//    while(*command != EOF)
-//    {
-//        first_mat_name = NULL;
-//        second_mat_name = NULL;
-//        result_mat_name = NULL;
-//
-//        scanf("%s",command);
-//        int i = 0;
-//        while(command[i] != ' ' && command[i] != ',')
-//        {
-//            function_name[i] = command[i];
-//            i++;
-//        }
-//        function_name = function_name_parser(function_name);
-//        if (strcmp(function_name, "Undefined command name"))
-//        {
-//            printf("%s",function_name);
-//            continue;
-//        }
-//        //if (search_for_double_commas(command[i]) == true)
-//        //      {
-//        //          printf("Multiple consecutive commas");
-//        //          continue;
-//        //      }
-//
-//    }
-//
-//
-//
-//    free(command);
-//    free(function_name);
-//    free(first_mat_name);
-//    free(second_mat_name);
-//    free(result_mat_name);
-//
-//    return 0;
-//}
 
 int main()
 {
 
-    char* command = malloc(MAX_COMMAND_SIZE);
-    char* function_name  = malloc(MAX_FUNCTION_NAME);
+    char* input_string = malloc(sizeof(char)*MAX_STRING_SIZE);
+    char* command_name = malloc(MAX_COMMAND_SIZE);
     char* first_mat_name = malloc(MAX_MAT_MAME);
     char* second_mat_name = malloc(MAX_MAT_MAME);
     char* result_mat_name = malloc(MAX_MAT_MAME);
@@ -75,103 +23,113 @@ int main()
     mat *second_mat;
     mat *result_mat;
 
-    while (*command != EOF)
-    {
-        get_word(command);
+    int* position_in_string;
 
-        if (strcmp(command, "add_mat"))
+
+    fgets(input_string, MAX_STRING_SIZE , stdin);
+
+    while (strcmp(input_string, "stop") != 0)
+    {
+        *position_in_string = 0;
+
+        get_command_name(input_string, command_name, position_in_string);
+
+        if (strcmp(command_name, "add_mat") == 0)
         {
-            get_word(first_mat_name);
+            get_mat_name(input_string, first_mat_name,position_in_string);
             first_mat = get_matrix(first_mat_name);
-            get_word(second_mat_name);
+            get_mat_name(input_string, second_mat_name, position_in_string);
             second_mat = get_matrix(second_mat_name);
-            get_word(result_mat_name);
+            get_mat_name(input_string, result_mat_name, position_in_string);
             result_mat = get_matrix(result_mat_name);
             if (first_mat == NULL || second_mat == NULL || result_mat == NULL)
             {
-                printf("Undefined matrix name");
+                printf("Undefined matrix name\n");
                 continue;
             }
             add_mat(first_mat, second_mat, result_mat);
 
         }
-        else if (strcmp(command, "sub_mat"))
+        else if (strcmp(command_name, "sub_mat") == 0)
         {
-            get_word(first_mat_name);
+            get_mat_name(input_string, first_mat_name,position_in_string);
             first_mat = get_matrix(first_mat_name);
-            get_word(second_mat_name);
+            get_mat_name(input_string, second_mat_name, position_in_string);
             second_mat = get_matrix(second_mat_name);
-            get_word(result_mat_name);
+            get_mat_name(input_string, result_mat_name, position_in_string);
             result_mat = get_matrix(result_mat_name);
             if (first_mat == NULL || second_mat == NULL || result_mat == NULL)
             {
-                printf("Undefined matrix name");
+                printf("Undefined matrix name\n");
                 continue;
             }
             sub_mat(first_mat, second_mat, result_mat);
         }
-        else if (strcmp(command, "mul_mat"))
+        else if (strcmp(command_name, "mul_mat") == 0)
         {
-            get_word(first_mat_name);
+            get_mat_name(input_string, first_mat_name,position_in_string);
             first_mat = get_matrix(first_mat_name);
-            get_word(second_mat_name);
+            get_mat_name(input_string, second_mat_name, position_in_string);
             second_mat = get_matrix(second_mat_name);
-            get_word(result_mat_name);
+            get_mat_name(input_string, result_mat_name, position_in_string);
             result_mat = get_matrix(result_mat_name);
             if (first_mat == NULL || second_mat == NULL || result_mat == NULL)
             {
-                printf("Undefined matrix name");
+                printf("Undefined matrix name\n");
                 continue;
             }
             mul_mat(first_mat,second_mat, first_mat);
         }
-        else if (strcmp(command, "mul_scalar"))
+        else if (strcmp(command_name, "mul_scalar") == 0)
         {
-            get_word(first_mat_name);
+            double multiplayer = 0;
+            get_mat_name(input_string, first_mat_name, position_in_string);
             first_mat = get_matrix(first_mat_name);
-            get_word(result_mat_name);
+            multiplayer = parse_double_from_string(input_string, position_in_string);
+            if (!multiplayer)
+                continue;
+            get_mat_name(input_string, result_mat_name, position_in_string);
             result_mat = get_matrix(result_mat_name);
             if (first_mat == NULL || result_mat == NULL)
             {
-                printf("Undefined matrix name");
+                printf("Undefined matrix name\n");
                 continue;
             }
-
-//            mul_scalar(first_mat, )
+            mul_scalar(first_mat, multiplayer, result_mat);
 
         }
-        else if (strcmp(command, "trans_mat"))
+        else if (strcmp(command_name, "trans_mat") == 0)
         {
-            get_word(first_mat_name);
+            get_mat_name(input_string, first_mat_name, position_in_string);
             first_mat = get_matrix(first_mat_name);
-            get_word(result_mat_name);
+            get_mat_name(input_string, result_mat_name, position_in_string);
             result_mat = get_matrix(result_mat_name);
             if (first_mat == NULL || result_mat == NULL)
             {
-                printf("Undefined matrix name");
+                printf("Undefined matrix name\n");
                 continue;
             }
             trans_mat(first_mat, result_mat);
         }
-        else if (strcmp(command, "read_mat"))
+        else if (strcmp(command_name, "read_mat") == 0)
         {
-            get_word(first_mat_name);
+            get_mat_name(input_string, first_mat_name, position_in_string);
             first_mat = get_matrix(first_mat_name);
             if (first_mat == NULL)
             {
-                printf("Undefined matrix name");
+                printf("Undefined matrix name\n");
                 continue;
             }
+            read_mat(first_mat, input_string, position_in_string);
 
-            read_mat(first_mat);
         }
-        else if (strcmp(command, "print_mat"))
+        else if (strcmp(command_name, "print_mat") == 0)
         {
-            get_word(first_mat_name);
+            get_mat_name(input_string, first_mat_name, position_in_string);
             first_mat = get_matrix(first_mat_name);
             if (first_mat == NULL)
             {
-                printf("Undefined matrix name");
+                printf("Undefined matrix name\n");
                 continue;
             }
 
@@ -179,9 +137,16 @@ int main()
         }
 
         else
-            printf("Undefined command name");
+            printf("Undefined command name \n");
+
+        clean_string(command_name, MAX_COMMAND_SIZE);
+        fgets(input_string, MAX_STRING_SIZE , stdin);
 
     }
 
-
+    free(input_string);
+    free(command_name);
+    free(first_mat_name);
+    free(second_mat_name);
+    free(result_mat_name);
 }
