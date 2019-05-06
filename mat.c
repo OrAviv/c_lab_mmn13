@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "mat.h"
 
@@ -52,30 +53,44 @@ void get_command_name(char* string, char* command_name, int* i)
 mat *get_mat_name(char* string, char* mat_name, int* i)
 {
     int indicator = 0;
-    while (string[*i] == ' ')
+    bool double_commas = false;
+    while (string[*i] == ' ' || string[*i] == ',')
     {
-        (*i)++;
         if (string[*i] == ',')
         {
-            printf("Missing comma");
-            return NULL;
+            if (double_commas == true)
+            {
+                printf("Missing parameter\n");
+                return NULL;
+            }
+
+            double_commas = true;
         }
+
+        (*i)++;
     }
 
-    if (string[*i] == ',')
+    if (string[*i] == '\0')
     {
-        printf("illegal comma");
+        printf("Missing parameter\n");
         return NULL;
     }
 
-    while (string[*i] != ',' && string[*i] != '\0' && string[*i] != ' ' && string[*i] != '\n')
+    while (string[*i] >= 'A' && string[*i] <= 'a')
     {
         mat_name[indicator] = string[*i];
         indicator++;
         (*i)++;
     }
-    while (string[*i] == ' ' || string[*i] == ',')
-        (*i)++;
+
+    while (string[indicator] == ' ')
+        indicator++;
+
+    if (string[indicator] != ',')
+    {
+        printf("Missing comma\n");
+        return NULL;
+    }
 
     return get_matrix(mat_name);
 }
@@ -108,9 +123,9 @@ double parse_double_from_string (char* string, int* i)
         if ((string[*i] > '9' || string[*i] < '0') && string[*i] != '-')
         {
             if (get_mat_name(string, str_number,i) != NULL)
-                printf("Parameter not a scalar");
+                printf("Parameter not a scalar\n");
             else
-                printf("Parameter is not a real number");
+                printf("Parameter is not a real number\n");
             //return 0 as NULL
             free(str_number);
             break;
@@ -118,7 +133,7 @@ double parse_double_from_string (char* string, int* i)
     }
     if (string[*i] == ',')
     {
-        printf("Multiple consecutive commas");
+        printf("Multiple consecutive commas\n");
         free(str_number);
         //return 0 as NULL
         return 0;
@@ -157,7 +172,7 @@ void read_mat (mat *my_mat, char* string, int* index)
         (*index)++;
     if (string[*index] == '\0')
     {
-        printf("Missing parameter");
+        printf("Missing parameter\n");
         return;
     }
     for (int i = 0; i < MAT_ROW_SIZE; i++)
