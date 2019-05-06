@@ -22,6 +22,7 @@ mat MAT_D = {0};
 mat MAT_E = {0};
 mat MAT_F = {0};
 
+
 void clean_string (char* string , int size_of_clean)
 {
     for (int i = 0; i < size_of_clean; i++)
@@ -56,7 +57,7 @@ mat *get_mat_name(char* string, char* mat_name, int* i)
         (*i)++;
         if (string[*i] == ',')
         {
-            printf("Missing parameter");
+            printf("Missing comma");
             return NULL;
         }
     }
@@ -79,6 +80,24 @@ mat *get_mat_name(char* string, char* mat_name, int* i)
     return get_matrix(mat_name);
 }
 
+mat *get_matrix(char* mat_name)
+{
+    if(strcmp(mat_name, "MAT_A") == 0)
+        return &MAT_A;
+    if(strcmp(mat_name, "MAT_B") == 0)
+        return &MAT_B;
+    if(strcmp(mat_name, "MAT_C") == 0)
+        return &MAT_C;
+    if(strcmp(mat_name, "MAT_D") == 0)
+        return &MAT_D;
+    if(strcmp(mat_name, "MAT_E") == 0)
+        return &MAT_E;
+    if(strcmp(mat_name, "MAT_F") == 0)
+        return &MAT_F;
+    else
+        return NULL;
+}
+
 double parse_double_from_string (char* string, int* i)
 {
     char* str_number = malloc(STR_NUMBER_SIZE);
@@ -88,15 +107,18 @@ double parse_double_from_string (char* string, int* i)
         (*i)++;
         if ((string[*i] > '9' || string[*i] < '0') && string[*i] != '-')
         {
-            printf("Parameter is not a real number");
+            if (get_mat_name(string, str_number,i) != NULL)
+                printf("Parameter not a scalar");
+            else
+                printf("Parameter is not a real number");
             //return 0 as NULL
             free(str_number);
-            return 0;
+            break;
         }
     }
     if (string[*i] == ',')
     {
-        printf("illegal comma");
+        printf("Multiple consecutive commas");
         free(str_number);
         //return 0 as NULL
         return 0;
@@ -116,26 +138,6 @@ double parse_double_from_string (char* string, int* i)
     return return_value;
 }
 
-
-mat *get_matrix(char* mat_name)
-{
-    int val = strcmp(mat_name,"MAT_A");
-    if(strcmp(mat_name, "MAT_A") == 0)
-        return &MAT_A;
-    if(strcmp(mat_name, "MAT_B") == 0)
-        return &MAT_B;
-    if(strcmp(mat_name, "MAT_C") == 0)
-        return &MAT_C;
-    if(strcmp(mat_name, "MAT_D") == 0)
-        return &MAT_D;
-    if(strcmp(mat_name, "MAT_E") == 0)
-        return &MAT_E;
-    if(strcmp(mat_name, "MAT_F") == 0)
-        return &MAT_F;
-    else
-        return NULL;
-}
-
 /*sets mat_result to mat_a*/
 void set_mat (mat *mat_a, mat *mat_result)
 {
@@ -143,7 +145,7 @@ void set_mat (mat *mat_a, mat *mat_result)
     {
         for (int j = 0; j < MAT_COLUMN_SIZE; j++)
         {
-            *mat_result[i][j] = *mat_a[i][j];
+            (*mat_result)[i][j] = (*mat_a)[i][j];
         }
     }
 }
@@ -151,6 +153,13 @@ void set_mat (mat *mat_a, mat *mat_result)
 void read_mat (mat *my_mat, char* string, int* index)
 {
     double value = 0;
+    while (string[*index] == ' ')
+        (*index)++;
+    if (string[*index] == '\0')
+    {
+        printf("Missing parameter");
+        return;
+    }
     for (int i = 0; i < MAT_ROW_SIZE; i++)
     {
         for (int j = 0; j < MAT_COLUMN_SIZE; j++)
@@ -160,11 +169,10 @@ void read_mat (mat *my_mat, char* string, int* index)
             value = parse_double_from_string(string, index);
             if (!value)
                 return;
-            *my_mat[i][j] = value;
+            (*my_mat)[i][j] = value;
         }
     }
 }
-
 
 void print_mat (mat *mat_a)
 {
@@ -172,10 +180,10 @@ void print_mat (mat *mat_a)
     {
         for (int j = 0; j < MAT_COLUMN_SIZE; j++)
         {
-            if (*mat_a[i][j] >= MAX_PRINT_SIZE)
-                printf("%.2f ",*mat_a[i][j]);
+            if ((*mat_a)[i][j] <= MAX_PRINT_SIZE)
+                printf("%.2f ",(*mat_a)[i][j]);
             else
-                printf("%-7.2f ",*mat_a[i][j]);
+                printf("%-7.2f ",(*mat_a)[i][j]);
         }
         printf("\n");
     }
@@ -187,7 +195,7 @@ void add_mat (mat *mat_a, mat *mat_b, mat *mat_result)
     {
         for (int j = 0; j < MAT_COLUMN_SIZE; j++)
         {
-            *mat_result[i][j] = *mat_a[i][j] + *mat_b[i][j];
+            (*mat_result)[i][j] = (*mat_a)[i][j] + (*mat_b)[i][j];
         }
     }
 }
@@ -198,7 +206,7 @@ void sub_mat (mat *mat_a, mat *mat_b, mat *mat_result)
     {
         for (int j = 0; j < MAT_COLUMN_SIZE; j++)
         {
-            *mat_result[i][j] = *mat_a[i][j] - *mat_b[i][j];
+            (*mat_result)[i][j] = (*mat_a)[i][j] - (*mat_b)[i][j];
         }
     }
 }
@@ -214,7 +222,7 @@ void mul_mat (mat *mat_a, mat *mat_b, mat *mat_result)
         {
             for (int k = 0; k < MAT_ROW_SIZE; k++)
             {
-                mat_res_helper[i][j] += (*mat_a[i][k]) * (*mat_b[k][j]);
+                mat_res_helper[i][j] += ((*mat_a)[i][k]) * ((*mat_b)[k][j]);
             }
         }
     }
@@ -228,7 +236,7 @@ void mul_scalar (mat *mat_a, double multiplyer, mat *mat_result)
     {
         for (int j = 0; j < MAT_COLUMN_SIZE; j++)
         {
-            *mat_result[i][j] = *mat_a[i][j] * multiplyer;
+            (*mat_result)[i][j] = (*mat_a)[i][j] * multiplyer;
         }
     }
 }
@@ -241,7 +249,7 @@ void trans_mat (mat *mat_a, mat *mat_result)
     {
         for (int j = 0; j < MAT_COLUMN_SIZE; j++)
         {
-            mat_res_helper[j][i] = *mat_a[i][j];
+            mat_res_helper[j][i] = (*mat_a)[i][j];
         }
     }
 

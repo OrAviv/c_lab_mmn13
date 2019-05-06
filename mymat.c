@@ -76,8 +76,6 @@ int main()
             double multiplayer = 0;
             first_mat = get_mat_name(input_string, first_mat_name, position_in_string);
             multiplayer = parse_double_from_string(input_string, position_in_string);
-            if (!multiplayer)
-                continue;
             result_mat = get_mat_name(input_string, result_mat_name, position_in_string);
             if (first_mat == NULL || result_mat == NULL)
             {
